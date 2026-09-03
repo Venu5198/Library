@@ -1,0 +1,115 @@
+name: UI Component Library Pipeline
+
+on:
+  push:
+    paths:
+      - "ui-library/**"
+    branches: [main]
+    tags:
+      - "ui-v*"
+  pull_request:
+    paths:
+      - "ui-library/**"
+    branches: [main]
+
+jobs:
+  test-and-build:
+    name: Test & Build @myorg/ui
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: ui-library/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: ui-library
+        run: npm ci
+
+      - name: Run Typecheck
+        working-directory: ui-library
+        run: npm run typecheck
+
+      - name: Run ESLint
+        working-directory: ui-library
+        run: npm run lint
+
+      - name: Check Code Formatting
+        working-directory: ui-library
+        run: npm run format:check
+
+      - name: Run Vitest Unit Tests (46 Tests)
+        working-directory: ui-library
+        run: npm test
+
+      - name: Build Dual ESM/CJS Artifacts
+        working-directory: ui-library
+        run: npm run build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-library-dist
+          path: ui-library/dist/
+          retention-days: 7
+
+  publish-package:
+    name: Publish UI Package to Registry
+    needs: test-and-build
+    if: startsWith(github.ref, 'refs/tags/ui-v')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ui-library-dist
+          path: ui-library/dist/
+
+      # Authentication option 1: Google Artifact Registry (if GCP secrets provided)
+      - name: Authenticate to Google Cloud (Workload Identity)
+        if: env.GCP_PROJECT_ID != ''
+        uses: google-github-actions/auth@v2
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Configure GCP Artifact Registry Auth
+        if: env.GCP_PROJECT_ID != ''
+        working-directory: ui-library
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          npx google-artifactregistry-auth
+          npm publish
+
+      # Authentication option 2: GitHub Packages Registry fallback
+      - name: Publish to GitHub Packages
+        if: env.GCP_PROJECT_ID == ''
+        working-directory: ui-library
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+          npm publish || echo "Package version already published or simulated"

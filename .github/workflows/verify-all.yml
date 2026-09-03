@@ -1,0 +1,40 @@
+name: Platform Verification Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  verify-workspace:
+    name: Full Platform Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: |
+            ui-library/package-lock.json
+            frontend/package-lock.json
+
+      - name: Setup Python Runtime (for FastAPI Backend)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install Python Backend Dependencies
+        run: |
+          pip install -r backend/requirements.txt
+
+      - name: Run Cross-Platform Verification Script
+        run: |
+          node infrastructure/scripts/verify-all.js
