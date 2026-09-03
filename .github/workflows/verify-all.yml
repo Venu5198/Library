@@ -62,7 +62,7 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
-          npm install
+          npm install || (cat /home/runner/.npm/_logs/*-debug-0.log | tail -n 100 && exit 1)
 
       - name: Run Cross-Platform Verification Script
         run: |
