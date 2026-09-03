@@ -48,13 +48,13 @@ jobs:
           done
 
           cd ui-library
-          npm ci
+          npm ci --include=dev
           node ../infrastructure/scripts/publish-ui.js 0.1.0
 
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
-          npm install || (cat /home/runner/.npm/_logs/*-debug-0.log | tail -n 100 && exit 1)
+          npm install --include=dev || (cat /home/runner/.npm/_logs/*-debug-0.log | tail -n 100 && exit 1)
 
       - name: Run Typecheck
         working-directory: frontend

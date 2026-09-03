@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ui-library
-        run: npm ci
+        run: npm ci --include=dev
 
       - name: Run Typecheck
         working-directory: ui-library

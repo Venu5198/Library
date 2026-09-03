@@ -55,14 +55,14 @@ jobs:
 
           # Install UI library dependencies and publish versions 0.1.0 & 0.2.0 to CI Verdaccio
           cd ui-library
-          npm ci
+          npm ci --include=dev
           node ../infrastructure/scripts/publish-ui.js 0.1.0
           node ../infrastructure/scripts/publish-ui.js 0.2.0
 
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
-          npm install || (cat /home/runner/.npm/_logs/*-debug-0.log | tail -n 100 && exit 1)
+          npm install --include=dev || (cat /home/runner/.npm/_logs/*-debug-0.log | tail -n 100 && exit 1)
 
       - name: Run Cross-Platform Verification Script
         run: |
