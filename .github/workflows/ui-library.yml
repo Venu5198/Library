@@ -87,26 +87,22 @@ jobs:
 
       # Authentication option 1: Google Artifact Registry (if GCP secrets provided)
       - name: Authenticate to Google Cloud (Workload Identity)
-        if: env.GCP_PROJECT_ID != ''
+        if: ${{ secrets.GCP_PROJECT_ID != '' }}
         uses: google-github-actions/auth@v2
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         with:
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
           service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
 
       - name: Configure GCP Artifact Registry Auth
-        if: env.GCP_PROJECT_ID != ''
+        if: ${{ secrets.GCP_PROJECT_ID != '' }}
         working-directory: ui-library
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         run: |
           npx google-artifactregistry-auth
           npm publish
 
       # Authentication option 2: GitHub Packages Registry fallback
       - name: Publish to GitHub Packages
-        if: env.GCP_PROJECT_ID == ''
+        if: ${{ secrets.GCP_PROJECT_ID == '' }}
         working-directory: ui-library
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

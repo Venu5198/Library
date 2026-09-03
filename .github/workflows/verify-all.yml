@@ -53,6 +53,9 @@ jobs:
             sleep 2
           done
           
+          # Set fake token for CI Verdaccio publish
+          npm config set //localhost:4873/:_authToken "ci-token"
+
           # Install UI library dependencies and publish versions 0.1.0 & 0.2.0 to CI Verdaccio
           cd ui-library
           npm ci
