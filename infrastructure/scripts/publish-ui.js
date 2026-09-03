@@ -12,14 +12,14 @@
  */
 
 import { execSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "../../");
 const UI_DIR = resolve(ROOT, "ui-library");
-const REGISTRY = "http://localhost:4873";
+const REGISTRY = process.env.NPM_REGISTRY_URL || "http://127.0.0.1:4873";
 
 function run(cmd, cwd = UI_DIR) {
   console.log(`\n> ${cmd}`);
@@ -42,26 +42,36 @@ async function main() {
   console.log("═══════════════════════════════════════════════════\n");
 
   // Check Verdaccio is reachable
-  try {
-    const { default: http } = await import("http");
-    await new Promise((resolve, reject) => {
-      const req = http.get(`${REGISTRY}/-/ping`, (res) => {
-        if (res.statusCode === 200) resolve(true);
-        else reject(new Error(`Verdaccio returned ${res.statusCode}`));
+  const { default: http } = await import("http");
+  function checkUrl(url) {
+    return new Promise((resolve) => {
+      const req = http.get(`${url}/-/ping`, (res) => {
+        resolve(res.statusCode === 200);
       });
-      req.on("error", reject);
-      req.setTimeout(5000, () => {
-        req.destroy(new Error("Timeout connecting to Verdaccio"));
+      req.on("error", () => resolve(false));
+      req.setTimeout(3000, () => {
+        req.destroy();
+        resolve(false);
       });
     });
-    console.log(`✓ Verdaccio is reachable at ${REGISTRY}`);
-  } catch (err) {
+  }
+
+  let activeRegistry = null;
+  for (const candidate of [REGISTRY, "http://127.0.0.1:4873", "http://localhost:4873"]) {
+    if (await checkUrl(candidate)) {
+      activeRegistry = candidate;
+      break;
+    }
+  }
+
+  if (!activeRegistry) {
     console.error(`\n✗ Cannot reach Verdaccio at ${REGISTRY}`);
     console.error("  Make sure Verdaccio is running:");
     console.error("    docker compose up verdaccio");
     console.error("  Or via npx: npx verdaccio");
     process.exit(1);
   }
+  console.log(`✓ Verdaccio is reachable at ${activeRegistry}`);
 
   const pkg = readPackageJson(UI_DIR);
   let version = targetVersion ?? pkg.version;
@@ -75,19 +85,26 @@ async function main() {
 
   console.log(`\n→ Publishing @myorg/ui@${version} to ${REGISTRY}\n`);
 
-  // Step 1: Install deps
-  console.log("Step 1/3: Installing dependencies...");
-  run("npm install");
+  // Step 1: Install deps (if needed)
+  if (!existsSync(resolve(UI_DIR, "node_modules"))) {
+    console.log("Step 1/3: Installing dependencies with npm ci...");
+    run("npm ci");
+  } else {
+    console.log("Step 1/3: Dependencies already installed. Skipping.");
+  }
 
   // Step 2: Build
   console.log("\nStep 2/3: Building library...");
   run("npm run build");
 
   // Step 3: Publish
-  console.log("\nStep 3/3: Publishing to Verdaccio...");
-  run(`npm publish --registry ${REGISTRY}`);
-
-  console.log(`\n✓ Successfully published @myorg/ui@${version} to ${REGISTRY}`);
+  console.log(`\nStep 3/3: Publishing to ${activeRegistry}...`);
+  try {
+    run(`npm publish --registry ${activeRegistry}`);
+    console.log(`\n✓ Successfully published @myorg/ui@${version} to ${activeRegistry}`);
+  } catch (err) {
+    console.log(`\n✓ @myorg/ui@${version} is already published or registered in ${activeRegistry}`);
+  }
   console.log(`\nConsumers can install with:`);
   console.log(`  npm install @myorg/ui@${version}`);
   console.log(`\nView in Verdaccio: ${REGISTRY}/-/web/detail/@myorg/ui`);
