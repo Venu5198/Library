@@ -55,15 +55,32 @@ jobs:
 
       - name: Publish Initial UI Library Versions to Local Verdaccio
         run: |
+          npm config set //127.0.0.1:4873/:_authToken fake-token
+
           cd ui-library
           npm ci --include=dev
-          node ../infrastructure/scripts/publish-ui.js 0.1.0 || (echo "=== Verdaccio Logs ===" && docker logs verdaccio && exit 1)
-          node ../infrastructure/scripts/publish-ui.js 0.2.0 || (echo "=== Verdaccio Logs ===" && docker logs verdaccio && exit 1)
+          (node ../infrastructure/scripts/publish-ui.js 0.1.0 && node ../infrastructure/scripts/publish-ui.js 0.2.0) 2>&1 | tee /tmp/publish.log || {
+            echo "### Publish to Verdaccio Failed" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat /tmp/publish.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "### Verdaccio Docker Logs" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            docker logs verdaccio >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
-          npm install --include=dev
+          npm install --include=dev 2>&1 | tee /tmp/frontend-install.log || {
+            echo "### npm install in frontend Failed" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat /tmp/frontend-install.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Run Cross-Platform Verification Script
         run: |
