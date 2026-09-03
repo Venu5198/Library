@@ -1,0 +1,169 @@
+.myorg-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+}
+
+/* Variants */
+.myorg-text--h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+}
+
+.myorg-text--h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.myorg-text--h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: #0f172a;
+}
+
+.myorg-text--h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.myorg-text--h5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #0f172a;
+}
+
+.myorg-text--h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #0f172a;
+}
+
+.myorg-text--body1 {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.myorg-text--body2 {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.myorg-text--caption {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+.myorg-text--overline {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.myorg-text--label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #334155;
+}
+
+.myorg-text--code {
+  font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 0.875em;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #7c3aed;
+  background-color: #f5f3ff;
+  padding: 0.125em 0.375em;
+  border-radius: 0.25rem;
+}
+
+/* Colors */
+.myorg-text--color-default {
+  /* Uses variant default */
+}
+
+.myorg-text--color-muted {
+  color: #64748b;
+}
+
+.myorg-text--color-primary {
+  color: #6366f1;
+}
+
+.myorg-text--color-success {
+  color: #15803d;
+}
+
+.myorg-text--color-warning {
+  color: #a16207;
+}
+
+.myorg-text--color-error {
+  color: #dc2626;
+}
+
+.myorg-text--color-inherit {
+  color: inherit;
+}
+
+/* Alignment */
+.myorg-text--align-left {
+  text-align: left;
+}
+
+.myorg-text--align-center {
+  text-align: center;
+}
+
+.myorg-text--align-right {
+  text-align: right;
+}
+
+.myorg-text--align-justify {
+  text-align: justify;
+}
+
+/* Weights */
+.myorg-text--weight-normal {
+  font-weight: 400;
+}
+
+.myorg-text--weight-medium {
+  font-weight: 500;
+}
+
+.myorg-text--weight-semibold {
+  font-weight: 600;
+}
+
+.myorg-text--weight-bold {
+  font-weight: 700;
+}
+
+/* Truncate */
+.myorg-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

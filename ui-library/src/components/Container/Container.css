@@ -1,0 +1,53 @@
+.myorg-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.myorg-container--centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.myorg-container--padded {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .myorg-container--padded {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .myorg-container--padded {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Max widths */
+.myorg-container--sm {
+  max-width: 640px;
+}
+
+.myorg-container--md {
+  max-width: 768px;
+}
+
+.myorg-container--lg {
+  max-width: 1024px;
+}
+
+.myorg-container--xl {
+  max-width: 1280px;
+}
+
+.myorg-container--2xl {
+  max-width: 1536px;
+}
+
+.myorg-container--full {
+  max-width: 100%;
+}

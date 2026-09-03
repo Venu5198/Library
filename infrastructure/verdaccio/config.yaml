@@ -1,0 +1,73 @@
+# Verdaccio configuration for local npm registry
+# Simulates Google Artifact Registry locally
+
+# Storage path inside the container
+storage: /verdaccio/storage
+
+# Web UI configuration
+web:
+  title: MyOrg Private Registry
+  darkMode: false
+
+# Authentication
+auth:
+  htpasswd:
+    file: /verdaccio/storage/htpasswd
+    # Allow anyone to publish and access without login (local dev only)
+    max_users: -1
+
+# Security settings
+security:
+  api:
+    jwt:
+      sign:
+        expiresIn: 60d
+      verify:
+        someProp: [admins, superadmins]
+  web:
+    sign:
+      expiresIn: 7d
+
+# Uplinks — for packages not in this registry, fetch from npmjs
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+    timeout: 30s
+    maxage: 10m
+    max_fails: 3
+    fail_timeout: 5m
+
+# Package access rules
+packages:
+  # @myorg/* packages — managed locally only, never proxy to npm
+  "@myorg/*":
+    access: $all
+    publish: $all
+    unpublish: $all
+    # No uplink — these exist only in this registry
+
+  # @* scoped packages — try local first, then npm
+  "@*/*":
+    access: $all
+    publish: $all
+    proxy: npmjs
+
+  # All other packages — try local, then npm
+  "**":
+    access: $all
+    publish: $all
+    proxy: npmjs
+
+# Server configuration
+server:
+  keepAliveTimeout: 60
+  maxHeaderSize: 8192
+
+# Logging
+logs:
+  - { type: stdout, format: pretty, level: info }
+
+# Middleware
+middlewares:
+  audit:
+    enabled: true

@@ -1,0 +1,20 @@
+{
+  "name": "my-platform",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first full-stack platform (ui-library + frontend + backend)",
+  "scripts": {
+    "verify": "node infrastructure/scripts/verify-all.js",
+    "verify:ui": "npm run verify --prefix ui-library",
+    "verify:frontend": "npm run verify --prefix frontend",
+    "verify:backend": "npm run verify --prefix backend",
+    "db:seed": "node infrastructure/scripts/db-seed.js",
+    "publish:ui": "node infrastructure/scripts/publish-ui.js",
+    "security:audit": "node infrastructure/scripts/security-audit.js"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

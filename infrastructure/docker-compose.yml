@@ -1,0 +1,160 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Docker Compose — MyPlatform local development environment
+#
+# Services:
+#   verdaccio  — Private npm registry (port 4873)
+#   mongodb    — Persistent database (port 27017)
+#   mongo-express — MongoDB web UI (port 8081)
+#   backend    — Fastify REST API (port 8080)
+#   frontend   — React app served by nginx (port 3000)
+#
+# Usage:
+#   docker compose up --build           Start all services
+#   docker compose up -d                Start in detached mode
+#   docker compose down                 Stop services (keep volumes)
+#   docker compose down -v              Stop and remove volumes
+#   docker compose logs -f backend      Follow backend logs
+#   docker compose ps                   List services and status
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: my-platform
+
+services:
+  # ── Verdaccio — Local npm registry ──────────────────────────────────────────
+  verdaccio:
+    image: verdaccio/verdaccio:5
+    container_name: myplatform-verdaccio
+    ports:
+      - "4873:4873"
+    volumes:
+      - verdaccio_storage:/verdaccio/storage
+      - ./verdaccio/config.yaml:/verdaccio/conf/config.yaml:ro
+    environment:
+      - VERDACCIO_PUBLIC_URL=http://localhost:4873
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4873/-/ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # ── MongoDB ──────────────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7.0
+    container_name: myplatform-mongodb
+    ports:
+      - "27017:27017"    # Exposed to host for local dev tools (Compass, etc.)
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    environment:
+      # For production: use MONGO_INITDB_ROOT_USERNAME / PASSWORD
+      # and Secret Manager; for local dev, no auth for simplicity
+      MONGO_INITDB_DATABASE: myapp
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── Mongo Express — MongoDB Web UI ───────────────────────────────────────────
+  mongo-express:
+    image: mongo-express:1.0
+    container_name: myplatform-mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+      ME_CONFIG_SITE_BASEURL: /
+    networks:
+      - app-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Backend — Fastify REST API ────────────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      # Image naming supports eventual GCP migration:
+      # REGION-docker.pkg.dev/PROJECT/REPO/backend:<git-sha>
+    image: myplatform/backend:latest
+    container_name: myplatform-backend
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HOST: 0.0.0.0
+      MONGODB_URI: mongodb://mongodb:27017/myapp
+      DATABASE_NAME: myapp
+      CORS_ORIGINS: http://localhost:3000
+      LOG_LEVEL: info
+    networks:
+      - app-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── Frontend — React+Vite served by nginx ─────────────────────────────────────
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        # Verdaccio on host (accessible during docker build)
+        VERDACCIO_URL: http://host.docker.internal:4873
+        # Backend URL: browser accesses via localhost (not Docker network name)
+        VITE_API_URL: http://localhost:8080
+      # Image naming supports eventual GCP migration:
+      # REGION-docker.pkg.dev/PROJECT/REPO/frontend:<git-sha>
+    image: myplatform/frontend:latest
+    container_name: myplatform-frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    depends_on:
+      - verdaccio
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/nginx-health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  app-network:
+    driver: bridge
+    name: myplatform-network
+
+# ── Volumes ───────────────────────────────────────────────────────────────────
+volumes:
+  mongodb_data:
+    name: myplatform-mongodb-data
+    driver: local
+  verdaccio_storage:
+    name: myplatform-verdaccio-storage
+    driver: local
