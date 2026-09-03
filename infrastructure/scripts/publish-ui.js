@@ -103,7 +103,13 @@ async function main() {
     run(`npm publish --registry ${activeRegistry}`);
     console.log(`\n✓ Successfully published @myorg/ui@${version} to ${activeRegistry}`);
   } catch (err) {
-    console.log(`\n✓ @myorg/ui@${version} is already published or registered in ${activeRegistry}`);
+    const errorOutput = (err.stdout?.toString() || "") + (err.stderr?.toString() || "") + (err.message || "");
+    if (errorOutput.includes("previously published") || errorOutput.includes("already published") || errorOutput.includes("EPUBLISHCONFLICT") || errorOutput.includes("409")) {
+      console.log(`\n✓ @myorg/ui@${version} is already published or registered in ${activeRegistry}`);
+    } else {
+      console.error(`\n✗ Genuine publish failure:\n${errorOutput}`);
+      throw err;
+    }
   }
   console.log(`\nConsumers can install with:`);
   console.log(`  npm install @myorg/ui@${version}`);
