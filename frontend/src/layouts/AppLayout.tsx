@@ -54,7 +54,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 </li>
               ))}
             </ul>
-            <div className="app-nav__badge">
+            <div className="app-nav__status">
+              <span className="status-dot" aria-hidden="true"></span>
+              <span>FastAPI 8080</span>
               <span className="app-nav__version">v1.0.0</span>
             </div>
           </nav>
@@ -69,8 +71,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <Container maxWidth="xl">
           <div className="app-footer__inner">
             <p className="app-footer__text">
-              MyPlatform — Local-first · Cloud-ready · Built with{" "}
-              <strong>@myorg/ui@0.1.0</strong>
+              MyPlatform — Local-First · Cloud-Ready · Powered by{" "}
+              <strong>@myorg/ui@0.1.0</strong> &amp; <strong>FastAPI</strong>
             </p>
             <div className="app-footer__links">
               <a
@@ -85,7 +87,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                API Health
+                FastAPI Health
               </a>
               <a
                 href="http://localhost:8081"
