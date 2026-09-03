@@ -5,6 +5,7 @@ import "./AppLayout.css";
 
 const NAV_ITEMS = [
   { path: "/", label: "Home" },
+  { path: "/libraries", label: "Libraries & Versions" },
   { path: "/examples", label: "Examples" },
   { path: "/status", label: "Status" },
   { path: "/components", label: "Components" },

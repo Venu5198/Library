@@ -1,6 +1,24 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
+import fs from "fs";
+
+// Read package.json and @myorg/ui version dynamically
+const frontendPkg = JSON.parse(
+  fs.readFileSync(resolve(__dirname, "./package.json"), "utf-8"),
+);
+
+let uiPkg = { version: "0.1.0" };
+try {
+  uiPkg = JSON.parse(
+    fs.readFileSync(
+      resolve(__dirname, "./node_modules/@myorg/ui/package.json"),
+      "utf-8",
+    ),
+  );
+} catch {
+  // fallback
+}
 
 export default defineConfig({
   plugins: [react()],
@@ -13,7 +31,6 @@ export default defineConfig({
     port: 3000,
     host: true,
     proxy: {
-      // Proxy API requests in dev to avoid CORS (optional — backend handles CORS anyway)
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
@@ -37,7 +54,11 @@ export default defineConfig({
     },
   },
   define: {
-    // Expose NODE_ENV as string constant for tree-shaking
     "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV ?? "development"),
+    __APP_VERSION__: JSON.stringify(frontendPkg.version),
+    __UI_LIB_VERSION__: JSON.stringify(uiPkg.version),
+    __DEPENDENCIES__: JSON.stringify(frontendPkg.dependencies ?? {}),
+    __DEV_DEPENDENCIES__: JSON.stringify(frontendPkg.devDependencies ?? {}),
+    __BUILD_TIMESTAMP__: JSON.stringify(new Date().toISOString()),
   },
 });

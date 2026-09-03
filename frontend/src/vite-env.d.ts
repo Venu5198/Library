@@ -9,3 +9,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare const __APP_VERSION__: string;
+declare const __UI_LIB_VERSION__: string;
+declare const __DEPENDENCIES__: Record<string, string>;
+declare const __DEV_DEPENDENCIES__: Record<string, string>;
+declare const __BUILD_TIMESTAMP__: string;

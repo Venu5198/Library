@@ -63,6 +63,7 @@ describe("AppLayout", () => {
       </MemoryRouter>,
     );
     expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("Libraries & Versions")).toBeInTheDocument();
     expect(screen.getByText("Examples")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
     expect(screen.getByText("Components")).toBeInTheDocument();

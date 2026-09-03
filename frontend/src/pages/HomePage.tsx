@@ -134,19 +134,19 @@ export const HomePage: React.FC = () => {
             </Typography>
 
             <div className="hero__actions">
-              <Link to="/examples">
+              <Link to="/libraries">
                 <Button variant="primary" size="lg">
-                  Explore Live CRUD API →
+                  Libraries &amp; Versions Inspector →
+                </Button>
+              </Link>
+              <Link to="/examples">
+                <Button variant="outline" size="lg">
+                  Explore Live CRUD API
                 </Button>
               </Link>
               <Link to="/components">
-                <Button variant="outline" size="lg">
-                  Inspect UI Components
-                </Button>
-              </Link>
-              <Link to="/status">
                 <Button variant="ghost" size="lg">
-                  System Health Probe
+                  UI Components
                 </Button>
               </Link>
             </div>

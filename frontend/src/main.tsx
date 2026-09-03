@@ -8,6 +8,7 @@ import { HomePage } from "./pages/HomePage";
 import { ExamplesPage } from "./pages/ExamplesPage";
 import { StatusPage } from "./pages/StatusPage";
 import { ComponentsPage } from "./pages/ComponentsPage";
+import { LibrariesPage } from "./pages/LibrariesPage";
 
 const root = document.getElementById("root");
 if (!root) {
@@ -20,6 +21,7 @@ ReactDOM.createRoot(root).render(
       <AppLayout>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/libraries" element={<LibrariesPage />} />
           <Route path="/examples" element={<ExamplesPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/components" element={<ComponentsPage />} />
