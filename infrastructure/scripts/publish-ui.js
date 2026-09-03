@@ -23,7 +23,16 @@ const REGISTRY = process.env.NPM_REGISTRY_URL || "http://127.0.0.1:4873";
 
 function run(cmd, cwd = UI_DIR) {
   console.log(`\n> ${cmd}`);
-  execSync(cmd, { cwd, stdio: "inherit" });
+  try {
+    const output = execSync(cmd, { cwd, stdio: "pipe" });
+    process.stdout.write(output);
+    return output.toString();
+  } catch (err) {
+    const output = (err.stdout ? err.stdout.toString() : "") + (err.stderr ? err.stderr.toString() : "");
+    process.stderr.write(output);
+    err.outputCombined = output;
+    throw err;
+  }
 }
 
 function readPackageJson(dir) {
@@ -103,7 +112,7 @@ async function main() {
     run(`npm publish --registry ${activeRegistry}`);
     console.log(`\n✓ Successfully published @myorg/ui@${version} to ${activeRegistry}`);
   } catch (err) {
-    const errorOutput = (err.stdout?.toString() || "") + (err.stderr?.toString() || "") + (err.message || "");
+    const errorOutput = (err.outputCombined || "") + (err.stdout?.toString() || "") + (err.stderr?.toString() || "") + (err.message || "");
     if (errorOutput.includes("previously published") || errorOutput.includes("already published") || errorOutput.includes("EPUBLISHCONFLICT") || errorOutput.includes("409")) {
       console.log(`\n✓ @myorg/ui@${version} is already published or registered in ${activeRegistry}`);
     } else {

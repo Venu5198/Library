@@ -53,6 +53,9 @@ jobs:
             sleep 2
           done
 
+          # Set CI auth token for local Verdaccio
+          npm config set //127.0.0.1:4873/:_authToken "ci-token"
+
           # Install UI library dependencies and publish versions 0.1.0 & 0.2.0 to CI Verdaccio
           cd ui-library
           npm ci --include=dev
