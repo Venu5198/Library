@@ -33,6 +33,10 @@ jobs:
             sleep 1
           done
 
+      - name: Start MongoDB Service
+        run: |
+          docker run -d --name mongodb -p 27017:27017 mongo:7.0
+
       - name: Setup Node.js Runtime
         uses: actions/setup-node@v4
         with:
