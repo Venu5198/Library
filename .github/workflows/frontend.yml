@@ -40,15 +40,12 @@ jobs:
         run: |
           echo "Waiting for CI Verdaccio..."
           for i in {1..15}; do
-            if curl -s http://localhost:4873/-/ping > /dev/null; then
+            if curl -s http://127.0.0.1:4873/-/ping > /dev/null; then
               echo "✓ Verdaccio is online."
               break
             fi
             sleep 2
           done
-
-          # Set fake token for local Verdaccio publish in CI
-          npm config set //localhost:4873/:_authToken "ci-token"
 
           cd ui-library
           npm ci
@@ -56,7 +53,7 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install
 
       - name: Run Typecheck
         working-directory: frontend
@@ -108,21 +105,8 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Authenticate to Google Cloud (Workload Identity)
-        if: ${{ secrets.GCP_PROJECT_ID != '' }}
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
-          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
-
-      - name: Configure Docker for Google Artifact Registry
-        if: ${{ secrets.GCP_PROJECT_ID != '' }}
-        run: |
-          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
-
-      # Fallback to GitHub Container Registry (ghcr.io) if GCP secrets not yet set
+      # Fallback to GitHub Container Registry (ghcr.io)
       - name: Log in to GitHub Container Registry
-        if: ${{ secrets.GCP_PROJECT_ID == '' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -144,17 +128,29 @@ jobs:
   deploy-cloud-run:
     name: Deploy to Google Cloud Run
     needs: docker-build
-    if: github.ref == 'refs/heads/main' && secrets.GCP_PROJECT_ID != ''
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check GCP Deployment Configuration
+        id: check_gcp
+        run: |
+          if [ -n "${{ secrets.GCP_PROJECT_ID }}" ]; then
+            echo "enabled=true" >> $GITHUB_OUTPUT
+          else
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            echo "GCP_PROJECT_ID secret not configured. Skipping Cloud Run deployment."
+          fi
+
       - name: Authenticate to Google Cloud
+        if: steps.check_gcp.outputs.enabled == 'true'
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
           service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
 
       - name: Deploy to Cloud Run (Blue-Green Revision)
+        if: steps.check_gcp.outputs.enabled == 'true'
         run: |
           gcloud run deploy frontend \
             --project=${{ secrets.GCP_PROJECT_ID }} \

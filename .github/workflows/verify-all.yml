@@ -43,18 +43,15 @@ jobs:
 
       - name: Wait for Verdaccio Service & Publish Initial UI Library Versions
         run: |
-          echo "Checking Verdaccio availability on localhost:4873..."
+          echo "Checking Verdaccio availability on 127.0.0.1:4873..."
           for i in {1..15}; do
-            if curl -s http://localhost:4873/-/ping > /dev/null; then
+            if curl -s http://127.0.0.1:4873/-/ping > /dev/null; then
               echo "✓ Verdaccio is online."
               break
             fi
             echo "Waiting for Verdaccio..."
             sleep 2
           done
-          
-          # Set fake token for CI Verdaccio publish
-          npm config set //localhost:4873/:_authToken "ci-token"
 
           # Install UI library dependencies and publish versions 0.1.0 & 0.2.0 to CI Verdaccio
           cd ui-library
@@ -65,7 +62,7 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
-          npm ci
+          npm install
 
       - name: Run Cross-Platform Verification Script
         run: |
