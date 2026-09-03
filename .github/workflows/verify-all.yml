@@ -11,6 +11,12 @@ jobs:
     name: Full Platform Verification
     runs-on: ubuntu-latest
 
+    services:
+      verdaccio:
+        image: verdaccio/verdaccio:5
+        ports:
+          - 4873:4873
+
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -34,6 +40,29 @@ jobs:
       - name: Install Python Backend Dependencies
         run: |
           pip install -r backend/requirements.txt
+
+      - name: Wait for Verdaccio Service & Publish Initial UI Library Versions
+        run: |
+          echo "Checking Verdaccio availability on localhost:4873..."
+          for i in {1..15}; do
+            if curl -s http://localhost:4873/-/ping > /dev/null; then
+              echo "✓ Verdaccio is online."
+              break
+            fi
+            echo "Waiting for Verdaccio..."
+            sleep 2
+          done
+          
+          # Install UI library dependencies and publish versions 0.1.0 & 0.2.0 to CI Verdaccio
+          cd ui-library
+          npm ci
+          node ../infrastructure/scripts/publish-ui.js 0.1.0
+          node ../infrastructure/scripts/publish-ui.js 0.2.0
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: |
+          npm ci
 
       - name: Run Cross-Platform Verification Script
         run: |
