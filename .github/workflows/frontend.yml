@@ -17,15 +17,26 @@ jobs:
     name: Test & Build Frontend
     runs-on: ubuntu-latest
 
-    services:
-      verdaccio:
-        image: verdaccio/verdaccio:5
-        ports:
-          - 4873:4873
-
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+
+      - name: Start Verdaccio Registry Container
+        run: |
+          docker run -d \
+            --name verdaccio \
+            -p 4873:4873 \
+            -v ${{ github.workspace }}/infrastructure/verdaccio/config.yaml:/verdaccio/conf/config.yaml \
+            verdaccio/verdaccio:5
+
+          echo "Waiting for Verdaccio to be ready..."
+          for i in {1..20}; do
+            if curl -s http://127.0.0.1:4873/-/ping > /dev/null; then
+              echo "✓ Verdaccio is online with custom config."
+              break
+            fi
+            sleep 1
+          done
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -38,18 +49,6 @@ jobs:
 
       - name: Start & Publish UI Library to CI Verdaccio
         run: |
-          echo "Waiting for CI Verdaccio..."
-          for i in {1..15}; do
-            if curl -s http://127.0.0.1:4873/-/ping > /dev/null; then
-              echo "✓ Verdaccio is online."
-              break
-            fi
-            sleep 2
-          done
-
-          # Set CI auth token for local Verdaccio
-          npm config set //127.0.0.1:4873/:_authToken "ci-token"
-
           cd ui-library
           npm ci --include=dev
           node ../infrastructure/scripts/publish-ui.js 0.1.0
@@ -57,7 +56,7 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
-          npm install --include=dev || (cat /home/runner/.npm/_logs/*-debug-0.log | tail -n 100 && exit 1)
+          npm install --include=dev
 
       - name: Run Typecheck
         working-directory: frontend
