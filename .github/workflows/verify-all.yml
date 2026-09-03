@@ -19,6 +19,7 @@ jobs:
         run: |
           docker run -d \
             --name verdaccio \
+            --user root \
             -p 4873:4873 \
             -v ${{ github.workspace }}/infrastructure/verdaccio/config.yaml:/verdaccio/conf/config.yaml \
             verdaccio/verdaccio:5
@@ -56,8 +57,8 @@ jobs:
         run: |
           cd ui-library
           npm ci --include=dev
-          node ../infrastructure/scripts/publish-ui.js 0.1.0
-          node ../infrastructure/scripts/publish-ui.js 0.2.0
+          node ../infrastructure/scripts/publish-ui.js 0.1.0 || (echo "=== Verdaccio Logs ===" && docker logs verdaccio && exit 1)
+          node ../infrastructure/scripts/publish-ui.js 0.2.0 || (echo "=== Verdaccio Logs ===" && docker logs verdaccio && exit 1)
 
       - name: Install Frontend Dependencies
         working-directory: frontend
