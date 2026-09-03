@@ -16,13 +16,7 @@ type TypographyVariant =
   | "code";
 
 type TypographyColor =
-  | "default"
-  | "muted"
-  | "primary"
-  | "success"
-  | "warning"
-  | "error"
-  | "inherit";
+  "default" | "muted" | "primary" | "success" | "warning" | "error" | "inherit";
 
 type TypographyAlign = "left" | "center" | "right" | "justify";
 

@@ -43,7 +43,7 @@
   color: white;
   font-weight: 800;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
 }
 
@@ -71,7 +71,9 @@
   font-weight: 500;
   color: #475569;
   text-decoration: none;
-  transition: color 150ms ease, background-color 150ms ease;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
 }
 
 .app-nav__link:hover {

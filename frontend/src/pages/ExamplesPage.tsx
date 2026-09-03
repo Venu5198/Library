@@ -1,12 +1,5 @@
 import React, { useState, useCallback } from "react";
-import {
-  Button,
-  Card,
-  Container,
-  Typography,
-  Input,
-  Badge,
-} from "@myorg/ui";
+import { Button, Card, Container, Typography, Input, Badge } from "@myorg/ui";
 import { useApi } from "../hooks/useApi";
 import { getExamples, createExample, deleteExample } from "../services/api";
 import type { Example } from "../services/api";
@@ -22,7 +15,7 @@ export const ExamplesPage: React.FC = () => {
 
   const fetcher = useCallback(
     () => getExamples({ search: searchQuery || undefined }),
-    [searchQuery]
+    [searchQuery],
   );
 
   const { data, loading, error, refetch } = useApi(fetcher, [searchQuery]);
@@ -49,7 +42,11 @@ export const ExamplesPage: React.FC = () => {
       setNewDesc("");
       refetch();
     } catch (err) {
-      setFormError(err && typeof err === "object" && "message" in err ? String((err as {message:string}).message) : "Failed to create example.");
+      setFormError(
+        err && typeof err === "object" && "message" in err
+          ? String((err as { message: string }).message)
+          : "Failed to create example.",
+      );
     } finally {
       setCreating(false);
     }
@@ -71,14 +68,19 @@ export const ExamplesPage: React.FC = () => {
         <div className="examples-page__header">
           <Typography variant="h1">Examples</Typography>
           <Typography variant="body1" color="muted">
-            Live data from the backend REST API. Demonstrates full-stack connectivity.
+            Live data from the backend REST API. Demonstrates full-stack
+            connectivity.
           </Typography>
         </div>
 
         <div className="examples-page__layout">
           {/* Create form */}
           <aside className="examples-page__sidebar">
-            <Card variant="default" padding="md" header={<Typography variant="h5">Create Example</Typography>}>
+            <Card
+              variant="default"
+              padding="md"
+              header={<Typography variant="h5">Create Example</Typography>}
+            >
               <form onSubmit={handleCreate} noValidate>
                 <div className="create-form">
                   <Input
@@ -131,7 +133,10 @@ export const ExamplesPage: React.FC = () => {
                 <Button
                   type="button"
                   variant="ghost"
-                  onClick={() => { setSearch(""); setSearchQuery(""); }}
+                  onClick={() => {
+                    setSearch("");
+                    setSearchQuery("");
+                  }}
                 >
                   Clear
                 </Button>
@@ -143,8 +148,18 @@ export const ExamplesPage: React.FC = () => {
               <div className="examples-loading">
                 {[1, 2, 3].map((n) => (
                   <div key={n} className="example-skeleton">
-                    <div className="skeleton" style={{ height: "1.5rem", width: "60%", marginBottom: "0.5rem" }} />
-                    <div className="skeleton" style={{ height: "1rem", width: "80%" }} />
+                    <div
+                      className="skeleton"
+                      style={{
+                        height: "1.5rem",
+                        width: "60%",
+                        marginBottom: "0.5rem",
+                      }}
+                    />
+                    <div
+                      className="skeleton"
+                      style={{ height: "1rem", width: "80%" }}
+                    />
                   </div>
                 ))}
               </div>
@@ -152,12 +167,26 @@ export const ExamplesPage: React.FC = () => {
 
             {error && (
               <Card variant="outlined" padding="md" className="examples-error">
-                <Badge colorScheme="error" variant="subtle">Connection Error</Badge>
-                <Typography variant="body2" color="muted" style={{ marginTop: "0.5rem" }}>
+                <Badge colorScheme="error" variant="subtle">
+                  Connection Error
+                </Badge>
+                <Typography
+                  variant="body2"
+                  color="muted"
+                  style={{ marginTop: "0.5rem" }}
+                >
                   {error}. Make sure the backend is running at{" "}
-                  <code>{import.meta.env.VITE_API_URL ?? "http://localhost:8080"}</code>.
+                  <code>
+                    {import.meta.env.VITE_API_URL ?? "http://localhost:8080"}
+                  </code>
+                  .
                 </Typography>
-                <Button variant="outline" size="sm" onClick={refetch} style={{ marginTop: "0.75rem" }}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={refetch}
+                  style={{ marginTop: "0.75rem" }}
+                >
                   Retry
                 </Button>
               </Card>
@@ -167,11 +196,16 @@ export const ExamplesPage: React.FC = () => {
               <>
                 <div className="examples-meta">
                   <Typography variant="caption" color="muted">
-                    {data.pagination.total} result{data.pagination.total !== 1 ? "s" : ""}
+                    {data.pagination.total} result
+                    {data.pagination.total !== 1 ? "s" : ""}
                   </Typography>
                 </div>
                 {data.data.length === 0 ? (
-                  <Card variant="filled" padding="lg" className="examples-empty">
+                  <Card
+                    variant="filled"
+                    padding="lg"
+                    className="examples-empty"
+                  >
                     <Typography variant="body1" color="muted" align="center">
                       No examples found. Create one using the form.
                     </Typography>
@@ -209,7 +243,9 @@ function ExampleCard({
       padding="md"
       header={
         <div className="example-card__header">
-          <Typography variant="h5" truncate>{example.title}</Typography>
+          <Typography variant="h5" truncate>
+            {example.title}
+          </Typography>
           <Button
             variant="ghost"
             size="sm"
@@ -222,7 +258,11 @@ function ExampleCard({
       }
     >
       {example.description && (
-        <Typography variant="body2" color="muted" className="example-card__desc">
+        <Typography
+          variant="body2"
+          color="muted"
+          className="example-card__desc"
+        >
           {example.description}
         </Typography>
       )}

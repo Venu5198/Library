@@ -5,19 +5,51 @@ import { AppLayout } from "./layouts/AppLayout";
 
 // Mock @myorg/ui — in tests we don't need Verdaccio
 vi.mock("@myorg/ui", () => ({
-  Container: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  Button: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
-    <button onClick={onClick}>{children}</button>
+  Container: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
   ),
-  Badge: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-  Card: ({ children, header }: { children: React.ReactNode; header?: React.ReactNode }) => (
-    <div>{header}{children}</div>
+  Button: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+  }) => <button onClick={onClick}>{children}</button>,
+  Badge: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
   ),
-  Typography: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-  Modal: ({ children, isOpen }: { children: React.ReactNode; isOpen: boolean }) =>
-    isOpen ? <div role="dialog">{children}</div> : null,
-  Input: ({ label, ...props }: { label?: string } & React.InputHTMLAttributes<HTMLInputElement>) => (
-    <div><label>{label}<input {...props} /></label></div>
+  Card: ({
+    children,
+    header,
+  }: {
+    children: React.ReactNode;
+    header?: React.ReactNode;
+  }) => (
+    <div>
+      {header}
+      {children}
+    </div>
+  ),
+  Typography: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
+  Modal: ({
+    children,
+    isOpen,
+  }: {
+    children: React.ReactNode;
+    isOpen: boolean;
+  }) => (isOpen ? <div role="dialog">{children}</div> : null),
+  Input: ({
+    label,
+    ...props
+  }: { label?: string } & React.InputHTMLAttributes<HTMLInputElement>) => (
+    <div>
+      <label>
+        {label}
+        <input {...props} />
+      </label>
+    </div>
   ),
 }));
 
@@ -28,7 +60,7 @@ describe("AppLayout", () => {
         <AppLayout>
           <div>Content</div>
         </AppLayout>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Examples")).toBeInTheDocument();
@@ -42,7 +74,7 @@ describe("AppLayout", () => {
         <AppLayout>
           <div>Test child content</div>
         </AppLayout>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByText("Test child content")).toBeInTheDocument();
   });
@@ -53,7 +85,7 @@ describe("AppLayout", () => {
         <AppLayout>
           <div />
         </AppLayout>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByText("MyPlatform")).toBeInTheDocument();
   });

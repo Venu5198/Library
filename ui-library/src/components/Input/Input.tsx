@@ -50,7 +50,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const errorId = `${id}-error`;
     const hasError = Boolean(error);
 
-    const wrapperClasses = ["myorg-input-wrapper", fullWidth ? "myorg-input-wrapper--full-width" : ""]
+    const wrapperClasses = [
+      "myorg-input-wrapper",
+      fullWidth ? "myorg-input-wrapper--full-width" : "",
+    ]
       .filter(Boolean)
       .join(" ");
 
@@ -94,9 +97,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             required={required}
             aria-invalid={hasError}
             aria-describedby={
-              [hasError ? errorId : null, helperText ? helperId : null]
-                .filter(Boolean)
-                .join(" ") || undefined
+              [hasError ? errorId : null, helperText ? helperId : null].filter(Boolean).join(" ") ||
+              undefined
             }
             {...props}
           />

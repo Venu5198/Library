@@ -48,3 +48,17 @@ infrastructure/verdaccio/storage/
 
 # TypeScript incremental build
 *.tsbuildinfo
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+
+.codex
+.impeccable
+skills

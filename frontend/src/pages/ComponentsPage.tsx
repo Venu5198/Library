@@ -33,8 +33,8 @@ export const ComponentsPage: React.FC = () => {
           </Typography>
           <Typography variant="h1">Component Library</Typography>
           <Typography variant="body1" color="muted">
-            All components are independently versioned, published to Verdaccio, and
-            consumed by this frontend via exact version pinning.
+            All components are independently versioned, published to Verdaccio,
+            and consumed by this frontend via exact version pinning.
           </Typography>
         </div>
 
@@ -47,12 +47,16 @@ export const ComponentsPage: React.FC = () => {
               header={
                 <div className="section-header">
                   <Typography variant="h4">Button</Typography>
-                  <Badge colorScheme="success" variant="subtle">v0.1.0</Badge>
+                  <Badge colorScheme="success" variant="subtle">
+                    v0.1.0
+                  </Badge>
                 </div>
               }
             >
               <div className="component-row">
-                <Typography variant="label" color="muted">Variants</Typography>
+                <Typography variant="label" color="muted">
+                  Variants
+                </Typography>
                 <div className="component-demo">
                   <Button variant="primary">Primary</Button>
                   <Button variant="secondary">Secondary</Button>
@@ -62,7 +66,9 @@ export const ComponentsPage: React.FC = () => {
                 </div>
               </div>
               <div className="component-row">
-                <Typography variant="label" color="muted">Sizes</Typography>
+                <Typography variant="label" color="muted">
+                  Sizes
+                </Typography>
                 <div className="component-demo component-demo--center">
                   <Button size="sm">Small</Button>
                   <Button size="md">Medium</Button>
@@ -70,7 +76,9 @@ export const ComponentsPage: React.FC = () => {
                 </div>
               </div>
               <div className="component-row">
-                <Typography variant="label" color="muted">States</Typography>
+                <Typography variant="label" color="muted">
+                  States
+                </Typography>
                 <div className="component-demo">
                   <Button loading>Loading</Button>
                   <Button disabled>Disabled</Button>
@@ -88,7 +96,9 @@ export const ComponentsPage: React.FC = () => {
               header={
                 <div className="section-header">
                   <Typography variant="h4">Input</Typography>
-                  <Badge colorScheme="success" variant="subtle">v0.1.0</Badge>
+                  <Badge colorScheme="success" variant="subtle">
+                    v0.1.0
+                  </Badge>
                 </div>
               }
             >
@@ -129,12 +139,16 @@ export const ComponentsPage: React.FC = () => {
               header={
                 <div className="section-header">
                   <Typography variant="h4">Badge</Typography>
-                  <Badge colorScheme="success" variant="subtle">v0.1.0</Badge>
+                  <Badge colorScheme="success" variant="subtle">
+                    v0.1.0
+                  </Badge>
                 </div>
               }
             >
               <div className="component-row">
-                <Typography variant="label" color="muted">Color Schemes</Typography>
+                <Typography variant="label" color="muted">
+                  Color Schemes
+                </Typography>
                 <div className="component-demo">
                   <Badge colorScheme="primary">Primary</Badge>
                   <Badge colorScheme="neutral">Neutral</Badge>
@@ -145,13 +159,17 @@ export const ComponentsPage: React.FC = () => {
                 </div>
               </div>
               <div className="component-row">
-                <Typography variant="label" color="muted">Variants</Typography>
+                <Typography variant="label" color="muted">
+                  Variants
+                </Typography>
                 <div className="component-demo">
                   <Badge variant="subtle">Subtle</Badge>
                   <Badge variant="solid">Solid</Badge>
                   <Badge variant="outline">Outline</Badge>
                   <Badge pill>Pill</Badge>
-                  <Badge dot colorScheme="success">Online</Badge>
+                  <Badge dot colorScheme="success">
+                    Online
+                  </Badge>
                 </div>
               </div>
             </Card>
@@ -165,7 +183,9 @@ export const ComponentsPage: React.FC = () => {
               header={
                 <div className="section-header">
                   <Typography variant="h4">Typography</Typography>
-                  <Badge colorScheme="success" variant="subtle">v0.1.0</Badge>
+                  <Badge colorScheme="success" variant="subtle">
+                    v0.1.0
+                  </Badge>
                 </div>
               }
             >
@@ -174,11 +194,22 @@ export const ComponentsPage: React.FC = () => {
                 <Typography variant="h2">Heading 2 — 1.875rem/700</Typography>
                 <Typography variant="h3">Heading 3 — 1.5rem/600</Typography>
                 <Typography variant="h4">Heading 4 — 1.25rem/600</Typography>
-                <Typography variant="body1">Body 1 — Regular paragraph text at 1rem/400 with comfortable line-height.</Typography>
-                <Typography variant="body2">Body 2 — Smaller body text at 0.875rem.</Typography>
-                <Typography variant="caption">Caption — 0.75rem, used for metadata and annotations.</Typography>
-                <Typography variant="overline">Overline — Uppercase label</Typography>
-                <Typography variant="code">const x = "code snippet"</Typography>
+                <Typography variant="body1">
+                  Body 1 — Regular paragraph text at 1rem/400 with comfortable
+                  line-height.
+                </Typography>
+                <Typography variant="body2">
+                  Body 2 — Smaller body text at 0.875rem.
+                </Typography>
+                <Typography variant="caption">
+                  Caption — 0.75rem, used for metadata and annotations.
+                </Typography>
+                <Typography variant="overline">
+                  Overline — Uppercase label
+                </Typography>
+                <Typography variant="code">
+                  {'const x = "code snippet"'}
+                </Typography>
               </div>
             </Card>
           </section>
@@ -191,7 +222,9 @@ export const ComponentsPage: React.FC = () => {
               header={
                 <div className="section-header">
                   <Typography variant="h4">Card</Typography>
-                  <Badge colorScheme="success" variant="subtle">v0.1.0</Badge>
+                  <Badge colorScheme="success" variant="subtle">
+                    v0.1.0
+                  </Badge>
                 </div>
               }
             >
@@ -208,8 +241,15 @@ export const ComponentsPage: React.FC = () => {
                 <Card variant="filled" padding="md">
                   <Typography variant="body2">Filled Card</Typography>
                 </Card>
-                <Card variant="default" padding="md" interactive onClick={() => setIsModalOpen(true)}>
-                  <Typography variant="body2">Interactive Card (click me)</Typography>
+                <Card
+                  variant="default"
+                  padding="md"
+                  interactive
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <Typography variant="body2">
+                    Interactive Card (click me)
+                  </Typography>
                 </Card>
               </div>
             </Card>
@@ -235,11 +275,19 @@ export const ComponentsPage: React.FC = () => {
         }
       >
         <Typography variant="body1">
-          This Modal is part of <Typography as="span" variant="code">@myorg/ui@0.1.0</Typography>.
-          It supports ESC key, backdrop click, animations, and ARIA dialog semantics.
+          This Modal is part of{" "}
+          <Typography as="span" variant="code">
+            @myorg/ui@0.1.0
+          </Typography>
+          . It supports ESC key, backdrop click, animations, and ARIA dialog
+          semantics.
         </Typography>
         {inputValue && (
-          <Typography variant="body2" color="muted" style={{ marginTop: "1rem" }}>
+          <Typography
+            variant="body2"
+            color="muted"
+            style={{ marginTop: "1rem" }}
+          >
             You entered: <strong>{inputValue}</strong>
           </Typography>
         )}

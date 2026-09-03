@@ -96,7 +96,9 @@ export async function getExamples(params?: {
   if (params?.tag) query.set("tag", params.tag);
 
   const qs = query.toString();
-  return request<PaginatedResponse<Example>>(`/api/examples${qs ? `?${qs}` : ""}`);
+  return request<PaginatedResponse<Example>>(
+    `/api/examples${qs ? `?${qs}` : ""}`,
+  );
 }
 
 export async function getExampleById(id: string): Promise<Example> {

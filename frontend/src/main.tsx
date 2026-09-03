@@ -35,5 +35,5 @@ ReactDOM.createRoot(root).render(
         </Routes>
       </AppLayout>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

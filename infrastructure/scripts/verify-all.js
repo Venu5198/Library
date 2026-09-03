@@ -44,7 +44,7 @@ for (const project of targets) {
     continue;
   }
 
-  if (!existsSync(resolve(projectDir, "node_modules"))) {
+  if (project !== "backend" && !existsSync(resolve(projectDir, "node_modules"))) {
     console.log(`→ Installing dependencies for ${project}...`);
     execSync("npm install", { cwd: projectDir, stdio: "inherit" });
   }
@@ -56,17 +56,30 @@ for (const project of targets) {
   const projectResult = { project, steps: {} };
   let projectFailed = false;
 
-  for (const step of STEPS) {
-    process.stdout.write(`  ✦ ${step.padEnd(20)}`);
+  if (project === "backend") {
+    process.stdout.write(`  ✦ ${"pytest".padEnd(20)}`);
     try {
-      run(step, projectDir);
+      execSync("python -m pytest tests", { cwd: projectDir, stdio: "inherit" });
       process.stdout.write(" ✓\n");
-      projectResult.steps[step] = "pass";
+      projectResult.steps["pytest"] = "pass";
     } catch {
       process.stdout.write(" ✗ FAILED\n");
-      projectResult.steps[step] = "fail";
+      projectResult.steps["pytest"] = "fail";
       projectFailed = true;
-      // Continue to check remaining steps but mark failure
+    }
+  } else {
+    for (const step of STEPS) {
+      process.stdout.write(`  ✦ ${step.padEnd(20)}`);
+      try {
+        run(step, projectDir);
+        process.stdout.write(" ✓\n");
+        projectResult.steps[step] = "pass";
+      } catch {
+        process.stdout.write(" ✗ FAILED\n");
+        projectResult.steps[step] = "fail";
+        projectFailed = true;
+        // Continue to check remaining steps but mark failure
+      }
     }
   }
 

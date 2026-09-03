@@ -22,8 +22,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       <header className="app-header">
         <Container maxWidth="xl">
           <nav className="app-nav" aria-label="Main navigation">
-            <Link to="/" className="app-nav__brand" aria-label="MyPlatform home">
-              <div className="app-nav__logo" aria-hidden="true">M</div>
+            <Link
+              to="/"
+              className="app-nav__brand"
+              aria-label="MyPlatform home"
+            >
+              <div className="app-nav__logo" aria-hidden="true">
+                M
+              </div>
               <span className="app-nav__name">MyPlatform</span>
             </Link>
             <ul className="app-nav__links" role="list">
@@ -33,11 +39,15 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                     to={item.path}
                     className={[
                       "app-nav__link",
-                      location.pathname === item.path ? "app-nav__link--active" : "",
+                      location.pathname === item.path
+                        ? "app-nav__link--active"
+                        : "",
                     ]
                       .filter(Boolean)
                       .join(" ")}
-                    aria-current={location.pathname === item.path ? "page" : undefined}
+                    aria-current={
+                      location.pathname === item.path ? "page" : undefined
+                    }
                   >
                     {item.label}
                   </Link>
@@ -63,13 +73,25 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <strong>@myorg/ui@0.1.0</strong>
             </p>
             <div className="app-footer__links">
-              <a href="http://localhost:4873" target="_blank" rel="noopener noreferrer">
+              <a
+                href="http://localhost:4873"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Verdaccio
               </a>
-              <a href="http://localhost:8080/health" target="_blank" rel="noopener noreferrer">
+              <a
+                href="http://localhost:8080/health"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 API Health
               </a>
-              <a href="http://localhost:8081" target="_blank" rel="noopener noreferrer">
+              <a
+                href="http://localhost:8081"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Mongo Express
               </a>
             </div>

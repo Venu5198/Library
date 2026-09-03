@@ -1,12 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Card,
-  Container,
-  Typography,
-  Badge,
-} from "@myorg/ui";
+import { Button, Card, Container, Typography, Badge } from "@myorg/ui";
 import "@myorg/ui/styles";
 import "./HomePage.css";
 
@@ -54,9 +48,14 @@ export const HomePage: React.FC = () => {
             <Typography variant="h1" className="hero__title">
               MyPlatform
             </Typography>
-            <Typography variant="body1" color="muted" className="hero__subtitle">
-              A complete local development platform — UI library, REST API, MongoDB, and Docker Compose.
-              Designed for seamless migration to Google Cloud.
+            <Typography
+              variant="body1"
+              color="muted"
+              className="hero__subtitle"
+            >
+              A complete local development platform — UI library, REST API,
+              MongoDB, and Docker Compose. Designed for seamless migration to
+              Google Cloud.
             </Typography>
             <div className="hero__actions">
               <Link to="/examples">
@@ -72,18 +71,30 @@ export const HomePage: React.FC = () => {
             </div>
             <div className="hero__stats">
               <div className="hero__stat">
-                <Typography variant="h3" color="primary">0.1.0</Typography>
-                <Typography variant="caption" color="muted">UI Library Version</Typography>
+                <Typography variant="h3" color="primary">
+                  0.1.0
+                </Typography>
+                <Typography variant="caption" color="muted">
+                  UI Library Version
+                </Typography>
               </div>
               <div className="hero__stat-divider" />
               <div className="hero__stat">
-                <Typography variant="h3" color="primary">6+</Typography>
-                <Typography variant="caption" color="muted">UI Components</Typography>
+                <Typography variant="h3" color="primary">
+                  6+
+                </Typography>
+                <Typography variant="caption" color="muted">
+                  UI Components
+                </Typography>
               </div>
               <div className="hero__stat-divider" />
               <div className="hero__stat">
-                <Typography variant="h3" color="primary">4</Typography>
-                <Typography variant="caption" color="muted">Docker Services</Typography>
+                <Typography variant="h3" color="primary">
+                  4
+                </Typography>
+                <Typography variant="caption" color="muted">
+                  Docker Services
+                </Typography>
               </div>
             </div>
           </div>
@@ -96,7 +107,12 @@ export const HomePage: React.FC = () => {
           <Typography variant="h2" align="center" className="section-title">
             Platform Architecture
           </Typography>
-          <Typography variant="body1" color="muted" align="center" className="section-subtitle">
+          <Typography
+            variant="body1"
+            color="muted"
+            align="center"
+            className="section-subtitle"
+          >
             Each layer is independently deployable and replaceable.
           </Typography>
           <div className="features__grid">
@@ -111,12 +127,21 @@ export const HomePage: React.FC = () => {
                   </div>
                 }
               >
-                <Typography variant="body2" color="muted" className="feature-card__desc">
+                <Typography
+                  variant="body2"
+                  color="muted"
+                  className="feature-card__desc"
+                >
                   {card.description}
                 </Typography>
                 <div className="feature-card__tags">
                   {card.tags.map((tag) => (
-                    <Badge key={tag} colorScheme={card.colorScheme} variant="subtle" pill>
+                    <Badge
+                      key={tag}
+                      colorScheme={card.colorScheme}
+                      variant="subtle"
+                      pill
+                    >
                       {tag}
                     </Badge>
                   ))}
@@ -138,17 +163,27 @@ export const HomePage: React.FC = () => {
               <div className="quickstart__step">
                 <span className="quickstart__step-num">1</span>
                 <code className="quickstart__cmd">cd infrastructure</code>
-                <Typography variant="caption" color="muted">Navigate to infra directory</Typography>
+                <Typography variant="caption" color="muted">
+                  Navigate to infra directory
+                </Typography>
               </div>
               <div className="quickstart__step">
                 <span className="quickstart__step-num">2</span>
-                <code className="quickstart__cmd">docker compose up --build</code>
-                <Typography variant="caption" color="muted">Start all services</Typography>
+                <code className="quickstart__cmd">
+                  docker compose up --build
+                </code>
+                <Typography variant="caption" color="muted">
+                  Start all services
+                </Typography>
               </div>
               <div className="quickstart__step">
                 <span className="quickstart__step-num">3</span>
-                <code className="quickstart__cmd">node scripts/publish-ui.js</code>
-                <Typography variant="caption" color="muted">Publish @myorg/ui to Verdaccio</Typography>
+                <code className="quickstart__cmd">
+                  node scripts/publish-ui.js
+                </code>
+                <Typography variant="caption" color="muted">
+                  Publish @myorg/ui to Verdaccio
+                </Typography>
               </div>
             </div>
           </Card>

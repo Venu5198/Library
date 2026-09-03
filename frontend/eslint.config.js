@@ -39,6 +39,6 @@ export default [
     },
   },
   {
-    ignores: ["dist/**", "node_modules/**", "stories/**", ".storybook/**"],
+    ignores: ["dist/**", "node_modules/**"],
   },
 ];

@@ -2,13 +2,7 @@ import React from "react";
 import "./Badge.css";
 
 export type BadgeVariant = "solid" | "subtle" | "outline";
-export type BadgeColorScheme =
-  | "primary"
-  | "neutral"
-  | "success"
-  | "warning"
-  | "error"
-  | "info";
+export type BadgeColorScheme = "primary" | "neutral" | "success" | "warning" | "error" | "info";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Color scheme */

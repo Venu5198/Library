@@ -29,19 +29,30 @@ export const StatusPage: React.FC = () => {
                 {loading ? (
                   <Badge colorScheme="neutral">Checking...</Badge>
                 ) : error ? (
-                  <Badge colorScheme="error" dot>Unreachable</Badge>
+                  <Badge colorScheme="error" dot>
+                    Unreachable
+                  </Badge>
                 ) : data?.status === "healthy" ? (
-                  <Badge colorScheme="success" dot>Healthy</Badge>
+                  <Badge colorScheme="success" dot>
+                    Healthy
+                  </Badge>
                 ) : (
-                  <Badge colorScheme="warning" dot>Degraded</Badge>
+                  <Badge colorScheme="warning" dot>
+                    Degraded
+                  </Badge>
                 )}
               </div>
             }
           >
-            {loading && <Typography variant="body2" color="muted">Fetching health data...</Typography>}
+            {loading && (
+              <Typography variant="body2" color="muted">
+                Fetching health data...
+              </Typography>
+            )}
             {error && (
               <Typography variant="body2" color="error">
-                Cannot reach {appConfig.apiUrl}/health. Is the backend container running?
+                Cannot reach {appConfig.apiUrl}/health. Is the backend container
+                running?
               </Typography>
             )}
             {data && !loading && (
@@ -50,7 +61,10 @@ export const StatusPage: React.FC = () => {
                 <StatusRow label="Environment" value={data.environment} />
                 <StatusRow label="Version" value={data.version} />
                 <StatusRow label="Uptime" value={`${data.uptime}s`} />
-                <StatusRow label="Timestamp" value={new Date(data.timestamp).toLocaleString()} />
+                <StatusRow
+                  label="Timestamp"
+                  value={new Date(data.timestamp).toLocaleString()}
+                />
               </div>
             )}
             <button className="status-refresh" onClick={refetch} type="button">
@@ -68,16 +82,23 @@ export const StatusPage: React.FC = () => {
                 {loading ? (
                   <Badge colorScheme="neutral">Checking...</Badge>
                 ) : data?.database?.connected ? (
-                  <Badge colorScheme="success" dot>Connected</Badge>
+                  <Badge colorScheme="success" dot>
+                    Connected
+                  </Badge>
                 ) : (
-                  <Badge colorScheme="error" dot>Disconnected</Badge>
+                  <Badge colorScheme="error" dot>
+                    Disconnected
+                  </Badge>
                 )}
               </div>
             }
           >
             {data && (
               <div className="status-details">
-                <StatusRow label="Connected" value={data.database.connected ? "Yes" : "No"} />
+                <StatusRow
+                  label="Connected"
+                  value={data.database.connected ? "Yes" : "No"}
+                />
                 <StatusRow label="Host (Docker)" value="mongodb:27017" />
                 <StatusRow label="Host (local)" value="localhost:27017" />
                 <StatusRow label="Database" value="myapp" />
@@ -92,7 +113,9 @@ export const StatusPage: React.FC = () => {
             header={
               <div className="status-card__header">
                 <Typography variant="h5">Verdaccio Registry</Typography>
-                <Badge colorScheme="info" dot>External</Badge>
+                <Badge colorScheme="info" dot>
+                  External
+                </Badge>
               </div>
             }
           >
@@ -119,7 +142,9 @@ export const StatusPage: React.FC = () => {
             header={
               <div className="status-card__header">
                 <Typography variant="h5">Frontend</Typography>
-                <Badge colorScheme="success" dot>Running</Badge>
+                <Badge colorScheme="success" dot>
+                  Running
+                </Badge>
               </div>
             }
           >
@@ -138,10 +163,17 @@ export const StatusPage: React.FC = () => {
             Version Isolation Demo
           </Typography>
           <Typography variant="body2" color="muted">
-            This frontend consumes <Typography as="span" variant="code">@myorg/ui@0.1.0</Typography>.
-            Version <Typography as="span" variant="code">@myorg/ui@0.2.0</Typography> (with Badge component)
-            is also published to Verdaccio and can be consumed independently by another frontend.
-            Both versions coexist in the registry without conflicts.
+            This frontend consumes{" "}
+            <Typography as="span" variant="code">
+              @myorg/ui@0.1.0
+            </Typography>
+            . Version{" "}
+            <Typography as="span" variant="code">
+              @myorg/ui@0.2.0
+            </Typography>{" "}
+            (with Badge component) is also published to Verdaccio and can be
+            consumed independently by another frontend. Both versions coexist in
+            the registry without conflicts.
           </Typography>
         </Card>
       </Container>
@@ -152,8 +184,12 @@ export const StatusPage: React.FC = () => {
 function StatusRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="status-row">
-      <Typography variant="label" color="muted">{label}</Typography>
-      <Typography variant="body2" className="status-row__value">{value}</Typography>
+      <Typography variant="label" color="muted">
+        {label}
+      </Typography>
+      <Typography variant="body2" className="status-row__value">
+        {value}
+      </Typography>
     </div>
   );
 }

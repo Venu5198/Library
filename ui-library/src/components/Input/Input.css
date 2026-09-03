@@ -10,7 +10,13 @@
 
 /* Label */
 .myorg-input-label {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    system-ui,
+    sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   color: #334155;
@@ -30,13 +36,22 @@
 
 /* Input field */
 .myorg-input-field {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    system-ui,
+    sans-serif;
   width: 100%;
   border: 1.5px solid #cbd5e1;
   border-radius: 0.375rem;
   background-color: #ffffff;
   color: #0f172a;
-  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
   outline: none;
   appearance: none;
 }
@@ -139,7 +154,13 @@
 /* Helper & error text */
 .myorg-input-helper,
 .myorg-input-error {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    system-ui,
+    sans-serif;
   font-size: 0.75rem;
   margin: 0;
   line-height: 1.5;
